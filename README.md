@@ -61,11 +61,9 @@ The pages are mainly styled using Bootstrap, and additional custom styles are de
 
 ## How to Run Application
 1.	Download project from this github repository and unzip it.
-2.	In the terminal, `cd` into the `cs50-capstone` directory.
+2.	In the terminal, `cd` into the `cs50-capstone-main` directory.
 3.	Run `python manage.py makemigrations tutormanager` to make migrations for the tutormanager app.
 4.	Run `python manage.py migrate` to apply migrations to the database.
 5.	Run `python manage.py runserver` to start the app.
-
-
-
+6.	Register for a student/tutor account
 
