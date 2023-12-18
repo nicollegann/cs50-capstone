@@ -15,47 +15,51 @@
                 {% endif %}
             </div>
             
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead class="table-header">
-                        <tr>
-                            <th scope="col">Lesson Date</th>
-                            <th scope="col">Lesson Time</th>
-                            {% if user.role == 1 %}
-                                <th scope="col">Student</th>
-                            {% elif user.role == 2 %}
-                                <th scope="col">Tutor</th>
-                                <th data-align="center">Cancel Lesson</th>
-                            {% else %}
-                                <th scope="col">Student</th>
-                                <th scope="col">Tutor</th>
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for lesson in upcoming_lessons %}
-                        <tr id="lesson-{{ lesson.id }}">
-                            <td>{{ lesson.date }}</td>
-                            <td>{{ lesson.time }}</td>
+            {% if upcoming_lessons %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-header">
+                            <tr>
+                                <th scope="col">Lesson Date</th>
+                                <th scope="col">Lesson Time</th>
+                                {% if user.role == 1 %}
+                                    <th scope="col">Student</th>
+                                {% elif user.role == 2 %}
+                                    <th scope="col">Tutor</th>
+                                    <th data-align="center">Cancel Lesson</th>
+                                {% else %}
+                                    <th scope="col">Student</th>
+                                    <th scope="col">Tutor</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lesson in upcoming_lessons %}
+                            <tr id="lesson-{{ lesson.id }}">
+                                <td>{{ lesson.date }}</td>
+                                <td>{{ lesson.time }}</td>
 
-                            {% if user.role != 2 %}
-                                <td>{{ lesson.student.get_full_name }} &nbsp; &#40;@{{ lesson.student.username }}&#41;</td>
-                            {% endif %}
+                                {% if user.role != 2 %}
+                                    <td>{{ lesson.student.get_full_name }} &nbsp; &#40;@{{ lesson.student.username }}&#41;</td>
+                                {% endif %}
 
-                            {% if user.role != 1 %}
-                                <td>{{ lesson.tutor.get_full_name }} &nbsp; &#40;@{{ lesson.tutor.username }}&#41;</td>
-                            {% endif %}
+                                {% if user.role != 1 %}
+                                    <td>{{ lesson.tutor.get_full_name }} &nbsp; &#40;@{{ lesson.tutor.username }}&#41;</td>
+                                {% endif %}
 
-                            {% if user.role == 2 %}
-                                <td>
-                                    <a class="cancel-btn btn fa-solid fa-close text-secondary" id="cancel-btn-{{ lesson.id }}" data-id="{{ lesson.id }}"></a>
-                                </td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                                {% if user.role == 2 %}
+                                    <td>
+                                        <a class="cancel-btn btn fa-solid fa-close text-secondary" id="cancel-btn-{{ lesson.id }}" data-id="{{ lesson.id }}"></a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div>You have no upcoming lessons.</div>
+            {% endif %}
         </div>
     </div>
 
