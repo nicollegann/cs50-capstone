@@ -1,0 +1,66 @@
+{% extends "tutormanager/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <div class="card w-75 mx-auto mt-5">
+        <div class="card-body">
+        
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <h2 class="">Upcoming Lessons</h2>
+                {% if user.role == 1 %}
+                    <a class="btn btn-primary" href="{% url 'add_availability' %}">Manage Availability</a>
+                {% elif user.role == 2 %}
+                    <a class="btn btn-primary" href="{% url 'view_tutor_availability' %}">Schedule New Lesson</a>
+                {% endif %}
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-header">
+                        <tr>
+                            <th scope="col">Lesson Date</th>
+                            <th scope="col">Lesson Time</th>
+                            {% if user.role == 1 %}
+                                <th scope="col">Student</th>
+                            {% elif user.role == 2 %}
+                                <th scope="col">Tutor</th>
+                                <th data-align="center">Cancel Lesson</th>
+                            {% else %}
+                                <th scope="col">Student</th>
+                                <th scope="col">Tutor</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lesson in upcoming_lessons %}
+                        <tr id="lesson-{{ lesson.id }}">
+                            <td>{{ lesson.date }}</td>
+                            <td>{{ lesson.time }}</td>
+
+                            {% if user.role != 2 %}
+                                <td>{{ lesson.student.get_full_name }} &nbsp; &#40;@{{ lesson.student.username }}&#41;</td>
+                            {% endif %}
+
+                            {% if user.role != 1 %}
+                                <td>{{ lesson.tutor.get_full_name }} &nbsp; &#40;@{{ lesson.tutor.username }}&#41;</td>
+                            {% endif %}
+
+                            {% if user.role == 2 %}
+                                <td>
+                                    <a class="cancel-btn btn fa-solid fa-close text-secondary" id="cancel-btn-{{ lesson.id }}" data-id="{{ lesson.id }}"></a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'tutormanager/dashboard.js' %}"></script>
+{% endblock %}

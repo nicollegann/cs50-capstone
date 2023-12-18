@@ -1,0 +1,64 @@
+{% extends "tutormanager/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <div class="card w-75 mx-auto mt-5">
+        <div class="card-body">
+            <h2 class="mb-4">Schedule New Lesson</h2>
+
+            <div class="alert alert-success mb-4" id="success-notification" role="alert">
+                Lesson scheduled successfully!
+            </div>
+
+            <form class="mb-3" action="{% url 'view_tutor_availability' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <select class="form-control" id="tutor-id" name="tutor-id">
+                            <option selected disabled>Select Tutor</option>
+                            {% for tutor in tutors %}
+                                <option value="{{ tutor.get_id }}"> {{ tutor.get_full_name }} (@{{ tutor.username }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary ml-2">Search</button>
+                </div>
+            </form>
+
+            {% if available_slots %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-header ">
+                        <tr>
+                            <th scope="col">Lesson Date</th>
+                            <th scope="col">Lesson Time</th>
+                            <th scope="col">Tutor</th>
+                            <th scope="col">Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for slot in available_slots %}
+                        <tr id="slot-{{ slot.id }}">
+                            <td>{{ slot.date }}</td>
+                            <td>{{ slot.time }}</td>
+                            <td>{{ slot.tutor.get_full_name }} &nbsp; &#40;@{{ slot.tutor.username }}&#41;</td>
+                            <td>
+                                <a class="select-btn btn btn-outline-secondary" id="select-btn-{{ slot.id }}" data-id="{{ slot.id }}">Select Slot</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <a class="btn btn-primary mt-4" href="{% url 'dashboard' %}">Back</a>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'tutormanager/student_add_schedule.js' %}"></script>
+{% endblock %}

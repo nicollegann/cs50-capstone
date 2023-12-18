@@ -1,0 +1,54 @@
+{% extends "tutormanager/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <div class="card w-75 mx-auto mt-5">
+        <div class="card-body">
+            <h2 class="mb-4">Available Lesson Slots</h2>
+
+            <form class="mb-4" action="{% url 'add_availability' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-row g-3">
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" id="available-date" name="available-date" placeholder="Lesson Date" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="time" class="form-control" id="available-time" name="available-time" placeholder="Lesson Time" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Lesson Slot</button>
+                </div>
+            </form>
+            
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered table-hover" id="availability-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th scope="col">Lesson Date</th>
+                            <th scope="col">Lesson Time</th>
+                            <th data-align="center">Remove Slot</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for slot in available_slots %}
+                        <tr id="slot-{{ slot.id }}">
+                            <td>{{ slot.date }}</td>
+                            <td>{{ slot.time }}</td>
+                            <td>
+                                <a class="remove-btn btn fa-solid fa-close text-secondary" id="remove-btn-{{ slot.id }}" data-id="{{ slot.id }}"></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <a class="btn btn-primary" href="{% url 'dashboard' %}">Back</a>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'tutormanager/tutor_availability.js' %}"></script>
+{% endblock %}

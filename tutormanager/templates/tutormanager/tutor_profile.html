@@ -1,0 +1,109 @@
+{% extends "tutormanager/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="card w-75 mx-auto my-5">
+        <div class="card-body">
+            <h2 class="card-title">@{{ tutor.username }}</h2>
+
+            <!-- Tutor Profile Details -->
+            <div id="profile-view" class="grid gap-0 row-gap-3">
+                <div class="p-2 g-col-6">
+                    <span class="font-weight-bold">Name: </span><span>{{ tutor.first_name }} {{ tutor.last_name }}</span>
+                </div>
+                <div class="p-2 g-col-6">
+                    <span class="font-weight-bold">Email: </span><span>{{ tutor.email }} </span>
+                </div>
+                <div class="p-2 g-col-6">
+                    <span class="font-weight-bold">Teaching Experience: </span><span>{{ tutor.experience_years }} </span>{% if tutor.experience_years > 1 %}years{% else %}year{% endif %}
+                </div>
+                <div class="p-2 g-col-6">
+                    <span class="font-weight-bold">Bio: </span><span>{{ tutor.bio }}</span>
+                </div>
+                {% if user.is_authenticated and request.user.id == tutor.id %}
+                <div class="p-2 g-col-6">  
+                    <button class="btn btn-primary mt-3" id="edit-btn" type="submit" data-id="{{ tutor.id }}">Edit Profile</button>
+                </div> 
+                {% endif %}
+            </div>
+
+            <!-- Edit Profile Details -->
+            <div id="edit-view">
+                <form id="edit-form">
+                    <div class="row">
+                        <div class="col form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" class="form-control" id="first-name" placeholder="Enter first name">
+                        </div>
+                        <div class="col form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" class="form-control" id="last-name" placeholder="Enter last name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input disabled class="form-control" value="{{ tutor.email }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="teaching-experience">Teaching Experience</label>
+                        <input type="number" class="form-control" id="teaching-experience" placeholder="Enter Years of Experience"></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea class="form-control" id="bio" placeholder="Enter bio"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary mt-2 mb-4" id="update-btn" data-id="{{ tutor.id }}">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="w-75 mx-auto">
+        <h3 class="mt-3 mb-2">Student Feedback</h3>
+
+        <!-- Tutor Ratings -->
+        <div class="d-flex justify-content-start align-items-center my-3">
+            <p class="mb-0 mr-2">Tutor Star Ratings</p>
+            {% if request.user in star_list.all %}
+                <i class="star-btn btn fa-solid fa-star text-warning p-0 mr-2" id="star-btn-{{ tutor.id }}" data-id="{{ tutor.id }}" data-state="star"></i>
+            {% else %}
+                <i class="star-btn btn fa-regular fa-star text-warning p-0 mr-2" id="star-btn-{{ tutor.id }}" data-id="{{ tutor.id }}" data-state="unstar"></i>
+            {% endif %}
+            <p class="mb-0" id="star-count-{{ tutor.id }}">{{ star_count }}</p>
+        </div>
+
+        <!-- Student feedback form (only visible to students)-->
+        {% if request.user.role == 2 %}
+            <div class="mb-4">   
+                <form action="{% url 'feedback' tutor.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea class="form-control" id="comment" type="text" placeholder="Enter Feedback Here..." name="comment" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="create-feedback">Post</button>
+                </form>
+            </div>
+        {% endif %} 
+
+        <!-- Student feedback -->
+        {% if not student_feedback is None %}
+            <div>
+                {% for feedback in student_feedback %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ feedback.student }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ feedback.datetime }}</h6>
+                            <p class="card-text">{{ feedback.comment }}</p> 
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'tutormanager/tutor_profile.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "tutormanager/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2 class="mb-4">Search for Tutors</h2>
+
+    <div class="mb-4" id="filter-profile">
+        <form class="form-inline" action="{% url 'search_tutors' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group mr-2 mb-2">
+                <input type="text" class="form-control" id="search-username" name="search-username" placeholder="Username">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2" id="search-btn">Search</button>
+        </form>
+    </div>
+
+    <div id="tutor-profiles">
+        {% if is_filtered %}
+            <h5>Search results for <span class="font-weight-bold">{{ username }}</span></h5>
+        {% endif %}
+        {% for tutor in tutors %}
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title"><a class="tutor-card-title text-decoration-none" href="{% url 'profile' tutor.user.id %}">@{{ tutor.user.username }}</a></h5>
+                        <a class="btn btn-link view-profile-btn" href="{% url 'profile' tutor.user.id %}">View Profile</a>
+                    </div>
+                    <div class="card-text">
+                        <span class="font-weight-bold">Name: </span><span>{{ tutor.user.first_name }} {{ tutor.user.last_name }}</span>
+                    </div>
+                    <div class="card-text">
+                        <span class="font-weight-bold">Teaching Experience: </span><span>{{ tutor.experience_years }} </span>{% if tutor.experience_years > 1 %}years{% else %}year{% endif %}
+                    </div>
+                    <div class="card-text">
+                        <span class="font-weight-bold">Bio: </span><span>{{ tutor.bio }}</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-start align-items-center mt-2">
+                        {% if request.user in tutor.star.all %}
+                            <i class="star-btn btn fa-solid fa-star text-warning p-0 mr-2" id="star-btn-{{ tutor.user.id }}" data-id="{{ tutor.user.id }}" data-state="star"></i>
+                        {% else %}
+                            <i class="star-btn btn fa-regular fa-star text-warning p-0 mr-2" id="like-btn-{{ tutor.user.id }}" data-id="{{ tutor.user.id }}" data-state="unstar"></i>
+                        {% endif %}
+                        <p class="mb-0" id="star-count-{{ tutor.user.id }}">{{ tutor.star.count }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <nav aria-label="All profiles">
+        <ul class="pagination">
+            {% if tutors.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ tutors.previous_page_number }}">Previous</a></li>
+            {% endif %}
+    
+            {% if tutors.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ tutors.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'tutormanager/tutor_profile.js' %}"></script>
+{% endblock %}
