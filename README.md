@@ -23,6 +23,7 @@ Each tutor's profile includes a star rating. Students can rate tutors and recomm
 TutorManager is unique due to its specialized and distinctive purpose as a management system tailored to synchronize schedules and manage records for its diverse user base. Its implementation differs from other projects in several key ways:
 
 **1. Role-based Access**
+
 TutorManager employs a role-based access system with three main user roles: admin, tutor, and student. This role-based access is achieved through the use of Groups and permissions, which was not utilized in previous projects. Each role has distinct page displays and access to specific features:
 
 - In Lesson Scheduling, tutors can manage their availability by adding or removing lesson slots, while students can only select available slots or cancel scheduled lessons.
@@ -32,6 +33,7 @@ TutorManager employs a role-based access system with three main user roles: admi
 - Role based access was implemented using Groups and permissions, which were not used in the previous projects
 
 **2. CRUD**
+
 TutorManager boasts a more robust set of CRUD (Create, Read, Update, Delete) functionalities compared to previous projects, offering users greater control and flexibility in managing their data. The following is a detailed list of some of the CRUD functionalities for various features.
 
 + Profile:
