@@ -369,7 +369,7 @@ def add_lesson(request):
 @user_passes_test(lambda u: u.groups.filter(name='TUTOR').exists())
 def delete_lesson(request, id):
     Lesson.objects.filter(pk=id).delete()
-    return lesson_record(request, request.user.id)
+    return lesson_record(request)
     
 
 @login_required
