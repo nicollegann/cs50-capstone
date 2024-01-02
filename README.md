@@ -1,4 +1,5 @@
-# TutorManager
+# TutorManager 2.0
+This web application utilizes Django on the back-end and Javascript on the front-end.
 
 ## Project Description
 **TutorManager** is a tutoring management system which aims to provide a common and convenient platform for tutors and students to keep track of lesson records and simplify lesson scheduling processes. It has five main features as follows:
@@ -68,4 +69,8 @@ The pages are mainly styled using Bootstrap, and additional custom styles are de
 4.	Run `python manage.py migrate` to apply migrations to the database.
 5.	Run `python manage.py runserver` to start the app.
 6.	Register for a student/tutor account
+
+----
+Overview of features: [Video Demo](https://youtu.be/_fq8m7gZAbU)
+
 
